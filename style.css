@@ -1,1 +1,22 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #0f172a;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
+h1 {
+  color: #00e5ff;
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #cbd5e1;
+  font-size: 18px;
+}
