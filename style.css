@@ -10,13 +10,20 @@ body {
   height: 100vh;
 }
 
+.container {
+  text-align: center;
+  background: #1e293b;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+}
+
 h1 {
   color: #00e5ff;
-  font-size: 42px;
   margin-bottom: 10px;
 }
 
 p {
   color: #cbd5e1;
-  font-size: 18px;
 }
