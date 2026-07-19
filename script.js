@@ -1,35 +1,61 @@
-document.querySelector(".analyze-btn").addEventListener("click", function () {
+const analyzeBtn = document.querySelector(".analyze-btn");
 
-  const text = document.querySelector("textarea").value;
+analyzeBtn.addEventListener("click", function () {
 
-  if (text.trim() === "") {
-    alert("Silakan tempel script atau caption terlebih dahulu!");
-    return;
-  }
+    const text = document.querySelector("textarea").value.toLowerCase();
 
-  let hook = Math.floor(Math.random() * 16) + 85;
-  let retention = Math.floor(Math.random() * 16) + 82;
-  let visual = Math.floor(Math.random() * 16) + 84;
-  let selling = Math.floor(Math.random() * 16) + 80;
-  let cta = Math.floor(Math.random() * 16) + 85;
+    if (text.trim() === "") {
+        alert("Masukkan script atau caption terlebih dahulu!");
+        return;
+    }
 
-  let prediction = "LOW";
+    let hook = 50;
+    let retention = 50;
+    let visual = 50;
+    let selling = 50;
+    let cta = 50;
 
-  const average = (hook + retention + visual + selling + cta) / 5;
+    // HOOK
+    if(text.includes("stop scroll")) hook += 15;
+    if(text.includes("jangan")) hook += 10;
+    if(text.includes("awas")) hook += 10;
+    if(text.includes("lihat")) hook += 5;
 
-  if (average >= 90) {
-    prediction = "HIGH";
-  } else if (average >= 80) {
-    prediction = "MEDIUM";
-  }
+    // SELLING
+    if(text.includes("diskon")) selling += 15;
+    if(text.includes("promo")) selling += 10;
+    if(text.includes("murah")) selling += 10;
+    if(text.includes("gratis")) selling += 10;
 
-  document.querySelector(".analysis-box").innerHTML = `
-    <p>🎯 Hook Score : ${hook}%</p>
-    <p>👀 Retention : ${retention}%</p>
-    <p>🎨 Visual : ${visual}%</p>
-    <p>💰 Selling Power : ${selling}%</p>
-    <p>📢 CTA : ${cta}%</p>
-    <p>🚀 Winning Prediction : ${prediction}</p>
-  `;
+    // CTA
+    if(text.includes("klik")) cta += 15;
+    if(text.includes("checkout")) cta += 10;
+    if(text.includes("pesan")) cta += 10;
+    if(text.includes("beli")) cta += 10;
 
+    // RETENTION
+    if(text.length > 150) retention += 15;
+    if(text.length > 300) retention += 10;
+
+    // VISUAL
+    if(text.includes("video")) visual += 10;
+    if(text.includes("hd")) visual += 10;
+    if(text.includes("4k")) visual += 15;
+
+    hook = Math.min(hook,100);
+    retention = Math.min(retention,100);
+    visual = Math.min(visual,100);
+    selling = Math.min(selling,100);
+    cta = Math.min(cta,100);
+
+    const overall = Math.round((hook+retention+visual+selling+cta)/5);
+
+    document.querySelector(".analysis-box").innerHTML = `
+        <p>🎯 Hook Score : ${hook}%</p>
+        <p>👀 Retention : ${retention}%</p>
+        <p>🎨 Visual : ${visual}%</p>
+        <p>💰 Selling Power : ${selling}%</p>
+        <p>📢 CTA : ${cta}%</p>
+        <h3>🏆 Overall Score : ${overall}%</h3>
+    `;
 });
