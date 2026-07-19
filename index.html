@@ -2,80 +2,359 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="ASURA Content Analyzer untuk menganalisis video dan produk."
+  >
+
   <title>ASURA Content Analyzer</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="dashboard">
+  <div class="app-shell">
 
-  <header class="header">
-    <h1>ASURA</h1>
-    <p>Content Analyzer</p>
-  </header>
+    <header class="app-header">
 
-  <nav class="menu">
-    <button>🏠 Dashboard</button>
-    <button>📊 Analyzer</button>
-    <button>📜 History</button>
-    <button>⚙️ Settings</button>
-  </nav>
+      <div class="brand">
+        <div class="brand-mark">A</div>
 
-  <section class="cards">
+        <div class="brand-text">
+          <h1>ASURA</h1>
+          <p>Content Analyzer</p>
+        </div>
+      </div>
 
-    <div class="card">
-      <h3>Overall Score</h3>
-      <h2 id="overall-score">0%</h2>
-    </div>
+      <div class="header-badge">
+        AI Analysis
+      </div>
 
-    <div class="card">
-      <h3>Winning Chance</h3>
-      <h2 id="winning-score">0%</h2>
-    </div>
+    </header>
 
-    <div class="card">
-      <h3>Viral Score</h3>
-      <h2 id="viral-score">0%</h2>
-    </div>
+    <main>
 
-    <div class="card">
-      <h3>Content Quality</h3>
-      <h2 id="quality-score">0%</h2>
-    </div>
+      <section class="hero-section">
 
-  </section>
+        <span class="eyebrow">CONTENT INTELLIGENCE</span>
 
-  <section class="analyzer">
+        <h2>
+          Analisis konten sebelum kamu menjalankan iklan
+        </h2>
 
-    <h2>Paste Your Content</h2>
+        <p>
+          Upload video, masukkan link video, dan tambahkan link produk
+          untuk melihat potensi performa kontenmu.
+        </p>
 
-    <textarea
-      class="content-input"
-      placeholder="Tempel script, caption, atau deskripsi produk di sini..."
-      rows="8"></textarea>
+      </section>
 
-    <button class="analyze-btn">
-      🚀 Analyze Content
-    </button>
+      <section class="input-panel">
 
-  </section>
+        <div class="panel-heading">
+          <div>
+            <span class="section-label">INPUT ANALYSIS</span>
+            <h3>Masukkan materi konten</h3>
+          </div>
 
-  <section class="analysis-panel">
+          <span class="step-badge">Ready</span>
+        </div>
 
-    <h2>AI Analysis Result</h2>
+        <div class="input-layout">
 
-    <div class="analysis-box">
+          <div class="upload-area">
 
-      <p>Belum ada analisis.</p>
+            <input
+              type="file"
+              id="video-file"
+              accept="video/mp4,video/webm,video/quicktime"
+              hidden
+            >
 
-    </div>
+            <label for="video-file" class="upload-box">
 
-  </section>
+              <span class="upload-icon">＋</span>
 
-</div>
+              <strong>Upload video</strong>
 
-<script src="script.js"></script>
+              <small>
+                MP4, MOV, atau WebM
+              </small>
+
+              <span class="upload-action">
+                Pilih file
+              </span>
+
+            </label>
+
+            <div class="file-information" id="file-information">
+              Belum ada video yang dipilih
+            </div>
+
+            <video
+              id="video-preview"
+              class="video-preview"
+              controls
+              hidden
+            ></video>
+
+          </div>
+
+          <div class="link-area">
+
+            <div class="form-group">
+
+              <label for="video-url">
+                Link video
+              </label>
+
+              <input
+                type="url"
+                id="video-url"
+                placeholder="https://link-video.com/..."
+                autocomplete="off"
+              >
+
+              <small>
+                Bisa dikosongkan apabila kamu mengunggah file video.
+              </small>
+
+            </div>
+
+            <div class="form-group">
+
+              <label for="product-url">
+                Link produk
+              </label>
+
+              <input
+                type="url"
+                id="product-url"
+                placeholder="https://link-produk.com/..."
+                autocomplete="off"
+              >
+
+              <small>
+                Masukkan halaman produk yang digunakan dalam konten.
+              </small>
+
+            </div>
+
+            <div class="form-group">
+
+              <label for="content-notes">
+                Catatan tambahan
+                <span>Opsional</span>
+              </label>
+
+              <textarea
+                id="content-notes"
+                rows="4"
+                placeholder="Contoh: target audiens, tujuan iklan, platform, atau angle konten..."
+              ></textarea>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <button id="analyze-btn" class="analyze-btn" type="button">
+
+          <span>Analyze Content</span>
+
+          <span class="button-arrow">→</span>
+
+        </button>
+
+        <div
+          id="analysis-status"
+          class="analysis-status"
+          aria-live="polite"
+        ></div>
+
+      </section>
+
+      <section
+        id="result-section"
+        class="result-section"
+      >
+
+        <div class="result-heading">
+
+          <div>
+            <span class="section-label">ANALYSIS RESULT</span>
+            <h3>Content performance</h3>
+          </div>
+
+          <div class="result-status" id="result-status">
+            Belum dianalisis
+          </div>
+
+        </div>
+
+        <div class="score-grid">
+
+          <article class="score-card score-card-main">
+
+            <span>Overall Score</span>
+
+            <strong id="overall-score">0</strong>
+
+            <small>/100</small>
+
+          </article>
+
+          <article class="score-card">
+
+            <span>Winning Chance</span>
+
+            <strong id="winning-score">0%</strong>
+
+          </article>
+
+          <article class="score-card">
+
+            <span>Viral Potential</span>
+
+            <strong id="viral-score">0%</strong>
+
+          </article>
+
+          <article class="score-card">
+
+            <span>Content Quality</span>
+
+            <strong id="quality-score">0%</strong>
+
+          </article>
+
+        </div>
+
+        <div class="analysis-grid">
+
+          <div class="metric-panel">
+
+            <h4>Score Breakdown</h4>
+
+            <div class="metric-item">
+
+              <div class="metric-label">
+                <span>Hook Strength</span>
+                <strong id="hook-value">0%</strong>
+              </div>
+
+              <div class="progress-track">
+                <div
+                  class="progress-fill"
+                  id="hook-bar"
+                ></div>
+              </div>
+
+            </div>
+
+            <div class="metric-item">
+
+              <div class="metric-label">
+                <span>Retention</span>
+                <strong id="retention-value">0%</strong>
+              </div>
+
+              <div class="progress-track">
+                <div
+                  class="progress-fill"
+                  id="retention-bar"
+                ></div>
+              </div>
+
+            </div>
+
+            <div class="metric-item">
+
+              <div class="metric-label">
+                <span>Visual Quality</span>
+                <strong id="visual-value">0%</strong>
+              </div>
+
+              <div class="progress-track">
+                <div
+                  class="progress-fill"
+                  id="visual-bar"
+                ></div>
+              </div>
+
+            </div>
+
+            <div class="metric-item">
+
+              <div class="metric-label">
+                <span>Selling Power</span>
+                <strong id="selling-value">0%</strong>
+              </div>
+
+              <div class="progress-track">
+                <div
+                  class="progress-fill"
+                  id="selling-bar"
+                ></div>
+              </div>
+
+            </div>
+
+            <div class="metric-item">
+
+              <div class="metric-label">
+                <span>CTA Strength</span>
+                <strong id="cta-value">0%</strong>
+              </div>
+
+              <div class="progress-track">
+                <div
+                  class="progress-fill"
+                  id="cta-bar"
+                ></div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="insight-panel">
+
+            <h4>ASURA Recommendation</h4>
+
+            <div id="analysis-summary" class="analysis-summary">
+
+              <p>
+                Hasil analisis dan rekomendasi akan tampil setelah video
+                atau link dimasukkan.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="app-footer">
+      <span>ASURA Content Analyzer</span>
+      <span>Analyze · Score · Optimize</span>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
 
 </body>
 </html>
