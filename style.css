@@ -87,3 +87,38 @@ body {
   background: #22c55e;
   color: #0f172a;
 }
+.analyzer {
+  margin-top: 30px;
+  background: #1e293b;
+  border: 1px solid #22c55e;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.analyzer h2 {
+  color: #22c55e;
+  margin-bottom: 15px;
+}
+
+.analyzer textarea {
+  width: 100%;
+  background: #0f172a;
+  color: white;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 12px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.analyze-btn {
+  margin-top: 15px;
+  width: 100%;
+  background: #22c55e;
+  color: #0f172a;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
