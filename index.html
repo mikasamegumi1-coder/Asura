@@ -3,25 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASURA Content Score</title>
+  <title>ASURA Content Analyzer</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="dashboard">
 
   <header class="header">
-    <h1>ASURA AI</h1>
-    <p>Dashboard Analisis Konten</p>
+    <h1>ASURA</h1>
+    <p>Content Analyzer</p>
   </header>
-<nav class="top-menu">
-  <button>🏠 Dashboard</button>
-  <button>📊 Content Score</button>
-  <button>📝 History</button>
-  <button>⚙️ Settings</button>
-</nav>
-  <section class="score-cards">
+
+  <nav class="menu">
+    <button>🏠 Dashboard</button>
+    <button>📊 Analyzer</button>
+    <button>📜 History</button>
+    <button>⚙️ Settings</button>
+  </nav>
+
+  <section class="cards">
 
     <div class="card">
       <h3>Overall Score</h3>
@@ -44,30 +45,37 @@
     </div>
 
   </section>
-<section class="analysis-panel">
-  <h2>AI Analysis</h2>
-<section class="analyzer">
-  <h2>Analyze Your Content</h2>
 
-  <textarea
-    placeholder="Tempel script, caption, atau deskripsi produk di sini..."
-    rows="8">
-  </textarea>
+  <section class="analyzer">
 
-  <button class="analyze-btn">
-    🚀 Analyze Content
-  </button>
-</section>
-  <div class="analysis-box">
-    <p>🎯 Hook Score : 90%</p>
-    <p>👀 Retention : 88%</p>
-    <p>🎨 Visual : 94%</p>
-    <p>💰 Selling Power : 86%</p>
-    <p>📢 CTA : 91%</p>
-    <p>🚀 Winning Prediction : HIGH</p>
-  </div>
-</section>
+    <h2>Paste Your Content</h2>
+
+    <textarea
+      class="content-input"
+      placeholder="Tempel script, caption, atau deskripsi produk di sini..."
+      rows="8"></textarea>
+
+    <button class="analyze-btn">
+      🚀 Analyze Content
+    </button>
+
+  </section>
+
+  <section class="analysis-panel">
+
+    <h2>AI Analysis Result</h2>
+
+    <div class="analysis-box">
+
+      <p>Belum ada analisis.</p>
+
+    </div>
+
+  </section>
+
 </div>
+
 <script src="script.js"></script>
+
 </body>
 </html>
