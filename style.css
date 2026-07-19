@@ -66,3 +66,24 @@ body {
   margin: 10px 0;
   color: #e2e8f0;
 }
+.top-menu {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.top-menu button {
+  background: #1e293b;
+  color: white;
+  border: 1px solid #22c55e;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.top-menu button:hover {
+  background: #22c55e;
+  color: #0f172a;
+}
