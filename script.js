@@ -59,3 +59,7 @@ analyzeBtn.addEventListener("click", function () {
         <h3>🏆 Overall Score : ${overall}%</h3>
     `;
 });
+document.getElementById("overall-score").textContent = overall + "%";
+document.getElementById("winning-score").textContent = Math.min(overall + 2, 100) + "%";
+document.getElementById("viral-score").textContent = Math.max(hook, retention) + "%";
+document.getElementById("quality-score").textContent = Math.round((visual + selling) / 2) + "%";
