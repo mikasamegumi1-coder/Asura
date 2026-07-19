@@ -87,7 +87,6 @@ videoFileInput.addEventListener("change", function () {
 /* =========================
    ANALYZE BUTTON
 ========================= */
-
 analyzeButton.addEventListener("click", async function () {
   const videoUrl = videoUrlInput.value.trim();
   const productUrl = productUrlInput.value.trim();
@@ -101,58 +100,85 @@ analyzeButton.addEventListener("click", async function () {
       "Upload video atau masukkan link video terlebih dahulu.",
       "error"
     );
-
-    videoFileInput.focus();
     return;
   }
 
   if (hasVideoUrl && !isValidUrl(videoUrl)) {
     showStatus("Link video tidak valid.", "error");
-    videoUrlInput.focus();
     return;
   }
 
   if (productUrl && !isValidUrl(productUrl)) {
     showStatus("Link produk tidak valid.", "error");
-    productUrlInput.focus();
     return;
   }
 
   setLoading(true);
+  showStatus("ASURA sedang menjalankan analisis AI...", "loading");
 
-  showStatus("ASURA sedang membaca materi konten...", "loading");
+  try {
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        videoUrl,
+        productUrl,
+        notes,
+        videoMetadata: {
+          fileName: selectedVideo?.name || "",
+          duration: videoMetadata.duration,
+          width: videoMetadata.width,
+          height: videoMetadata.height,
+          size: videoMetadata.size
+        }
+      })
+    });
 
-  await delay(900);
+    const data = await response.json();
 
-  const scores = calculateScores({
-    hasUploadedVideo,
-    videoUrl,
-    productUrl,
-    notes,
-    metadata: videoMetadata
-  });
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message || "Analisis AI gagal dijalankan."
+      );
+    }
 
-  updateDashboard(scores);
+    const analysis = data.analysis;
 
-  showRecommendations({
-    scores,
-    hasUploadedVideo,
-    videoUrl,
-    productUrl,
-    notes,
-    metadata: videoMetadata
-  });
+    const scores = {
+      hook: analysis.hook,
+      retention: analysis.retention,
+      visual: analysis.visual,
+      selling: analysis.sellingPower,
+      cta: analysis.cta,
+      overall: analysis.overall,
+      winning: analysis.winningChance,
+      viral: analysis.viralPotential,
+      quality: analysis.contentQuality
+    };
 
-  setLoading(false);
+    updateDashboard(scores);
+    showAIResult(analysis);
 
-  showStatus("Analisis selesai.", "success");
+    showStatus("Analisis AI selesai.", "success");
 
-  resultSection.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+    resultSection.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    showStatus(
+      error.message || "Terjadi kesalahan saat menghubungi AI.",
+      "error"
+    );
+  } finally {
+    setLoading(false);
+  }
 });
-
 /* =========================
    SCORING ENGINE
 ========================= */
@@ -750,4 +776,74 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+function showAIResult(analysis) {
+  const summary = document.getElementById("analysis-summary");
+
+  const strengths = Array.isArray(analysis.strengths)
+    ? analysis.strengths
+    : [];
+
+  const weaknesses = Array.isArray(analysis.weaknesses)
+    ? analysis.weaknesses
+    : [];
+
+  const recommendations = Array.isArray(analysis.recommendations)
+    ? analysis.recommendations
+    : [];
+
+  summary.innerHTML = `
+    <p>
+      <strong>Prediksi:</strong>
+      ${escapeHtml(analysis.prediction || "-")}
+    </p>
+
+    <p style="margin-top: 12px;">
+      ${escapeHtml(
+        analysis.summary || "Tidak ada ringkasan."
+      )}
+    </p>
+
+    <h4 style="margin-top: 20px;">Kelebihan</h4>
+    <ul>
+      ${
+        strengths.length
+          ? strengths
+              .map(
+                item =>
+                  `<li>${escapeHtml(item)}</li>`
+              )
+              .join("")
+          : "<li>Belum ada data.</li>"
+      }
+    </ul>
+
+    <h4 style="margin-top: 20px;">Kekurangan</h4>
+    <ul>
+      ${
+        weaknesses.length
+          ? weaknesses
+              .map(
+                item =>
+                  `<li>${escapeHtml(item)}</li>`
+              )
+              .join("")
+          : "<li>Belum ada data.</li>"
+      }
+    </ul>
+
+    <h4 style="margin-top: 20px;">Rekomendasi</h4>
+    <ul>
+      ${
+        recommendations.length
+          ? recommendations
+              .map(
+                item =>
+                  `<li>${escapeHtml(item)}</li>`
+              )
+              .join("")
+          : "<li>Belum ada rekomendasi.</li>"
+      }
+    </ul>
+  `;
 }
