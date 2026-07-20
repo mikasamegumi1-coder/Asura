@@ -19,18 +19,17 @@ export default {
       );
     }
 
-    try {
-      if (!process.env.OPENAI_API_KEY) {
-        return Response.json(
-          {
-            success: false,
-            message: "OPENAI_API_KEY belum terbaca di Vercel"
-          },
-          {
-            status: 500
-          }
-        );
-      }
+   if (!process.env.GEMINI_API_KEY) {
+  return Response.json(
+    {
+      success: false,
+      message: "GEMINI_API_KEY belum terbaca di Vercel"
+    },
+    {
+      status: 500
+    }
+  );
+}
 
       const body = await request.json();
 
@@ -88,142 +87,26 @@ Apabila data tidak cukup, jelaskan keterbatasannya.
 Gunakan Bahasa Indonesia.
 `;
 
-      const openAIResponse = await fetch(
-        "https://api.openai.com/v1/responses",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization":
-              `Bearer ${process.env.OPENAI_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: "gpt-5.6",
-            input: prompt,
-            text: {
-              format: {
-                type: "json_schema",
-                name: "asura_content_analysis",
-                strict: true,
-                schema: {
-                  type: "object",
-                  additionalProperties: false,
-                  properties: {
-                    hook: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    retention: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    visual: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    sellingPower: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    cta: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    overall: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    winningChance: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    viralPotential: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    contentQuality: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100
-                    },
-                    prediction: {
-                      type: "string"
-                    },
-                    summary: {
-                      type: "string"
-                    },
-                    strengths: {
-                      type: "array",
-                      items: {
-                        type: "string"
-                      }
-                    },
-                    weaknesses: {
-                      type: "array",
-                      items: {
-                        type: "string"
-                      }
-                    },
-                    recommendations: {
-                      type: "array",
-                      items: {
-                        type: "string"
-                      }
-                    }
-                  },
-                  required: [
-                    "hook",
-                    "retention",
-                    "visual",
-                    "sellingPower",
-                    "cta",
-                    "overall",
-                    "winningChance",
-                    "viralPotential",
-                    "contentQuality",
-                    "prediction",
-                    "summary",
-                    "strengths",
-                    "weaknesses",
-                    "recommendations"
-                  ]
-                }
-              }
-            }
-          })
-        }
-      );
+     const data = await geminiResponse.json();
 
-      const data = await openAIResponse.json();
+if (!geminiResponse.ok) {
+  console.error("Gemini error:", data);
 
-      if (!openAIResponse.ok) {
-        console.error("OpenAI error:", data);
+  return Response.json(
+    {
+      success: false,
+      message:
+        data?.error?.message ||
+        "Permintaan ke Gemini gagal",
+    },
+    {
+      status: geminiResponse.status,
+    }
+  );
+}
 
-        return Response.json(
-          {
-            success: false,
-            message:
-              data?.error?.message ||
-              "Permintaan ke OpenAI gagal"
-          },
-          {
-            status: openAIResponse.status
-          }
-        );
-      }
-
-      const outputText = data.output
-        ?.flatMap(item => item.content || [])
-        ?.find(item => item.type === "output_text")
-        ?.text;
+const outputText =
+  data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
       if (!outputText) {
         return Response.json(
